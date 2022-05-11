@@ -25,5 +25,4 @@ npm run dev
 - Sequelize
 - Axios
 - jsonwebtoken
-- cors
-- 
+- pg
