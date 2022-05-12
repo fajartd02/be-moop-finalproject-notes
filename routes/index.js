@@ -27,6 +27,10 @@ router.get("/api/v1/notes", async (req, res) => {
             to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at, 
             to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at 
             FROM note`);
+        
+        if(allNotes.rowCount === 0) {
+            res.json({message: "Database not have some data!"});
+        }
         res.json(allNotes.rows);
     } catch(err) {
         console.log(err.message);
@@ -42,7 +46,6 @@ router.get("/api/v1/notes/:id", async(req, res) => {
         to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at 
         FROM note WHERE note_id = $1`, [id]);
 
-        console.log(note);
         if(note.rowCount == 0) {
             res.json({message: "Data with this id doesn't exists!"});
         }
