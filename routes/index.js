@@ -8,7 +8,9 @@ router.post("/api/v1/notes", async (req, res) => {
     try {
         const { title, content } = req.body;
         const newContent = await pool.query(
-            "INSERT INTO note(title, content, created_at, updated_at) VALUES ($1, $2, current_timestamp, current_timestamp) RETURNING *",
+            `INSERT INTO note(title, content, created_at, updated_at) 
+             VALUES ($1, $2, current_timestamp, current_timestamp) 
+             RETURNING *`,
             [title, content]);
 
         res.json(newContent.rows[0]);
@@ -45,5 +47,24 @@ router.get("/api/v1/notes/:id", async(req, res) => {
         console.log(err.message);
     }
 })
+
+// update a note
+router.put("/api/v1/notes/:id", async(req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, content } = req.body;
+
+        const updateNote = await pool.query(
+            `UPDATE note SET title = $1, content = $2, 
+            updated_at = current_timestamp 
+            WHERE note_id = $3`,
+            [title, content, id]
+        );
+
+        res.json({message: "Todo Successfully Updated!"});
+    } catch(err) {
+        console.log(err.message);
+    }
+});
 
 module.exports = router;
