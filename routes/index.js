@@ -42,6 +42,10 @@ router.get("/api/v1/notes/:id", async(req, res) => {
         to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at 
         FROM note WHERE note_id = $1`, [id]);
 
+        console.log(note);
+        if(note.rowCount == 0) {
+            res.json({message: "Data with this id doesn't exists!"});
+        }
         res.json(note.rows[0]);
     } catch(err) {
         console.log(err.message);
@@ -61,10 +65,23 @@ router.put("/api/v1/notes/:id", async(req, res) => {
             [title, content, id]
         );
 
-        res.json({message: "Todo Successfully Updated!"});
+        res.json({message: "Todo was successfully updated!"});
     } catch(err) {
         console.log(err.message);
     }
 });
+
+// delete a todo
+router.delete("/api/v1/notes/:id", async(req, res) => {
+    try {
+        const { id } = req.params;
+        const deleteNote = await pool.query(
+            `DELETE FROM note WHERE note_id = $1`, [id]);
+        
+        res.json({message: "Todo was successfully deleted!"})
+    } catch(err) {
+        console.log(err.message);
+    }
+})
 
 module.exports = router;
