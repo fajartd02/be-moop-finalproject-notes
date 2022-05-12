@@ -41,6 +41,13 @@ npm install
 ```
 npm install -g nodemon
 ```
+- Create a file .env based on .env.example
+- Fill the .env with your postgreSQL username and password, for example:
+```
+DB_USER=[your userame postgreSQL]
+DB_PASSWORD=[your password postgreSQL]
+DB_HOST=localhost
+```
 - Run Server
 ```
 npm run dev
