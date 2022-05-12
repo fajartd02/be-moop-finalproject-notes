@@ -47,8 +47,8 @@ npm run dev
 ```
 
 # Techstack
+- Node.js
 - Express.js
 - PostgreSQL
-- Axios
-- jsonwebtoken
 - pg
+- dotenv
