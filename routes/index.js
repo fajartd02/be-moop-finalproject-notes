@@ -1,30 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db.js');
-const { createNote } = require('../controllers/notes.controller.js');
+const { createNote, getAllNotes } = require('../controllers/notes.controller.js');
 
 
 // create note
 router.post("/api/v1/notes", createNote);
 
 // get all notes
-router.get("/api/v1/notes", async (req, res) => {
-    try {
-        const allNotes = await pool.query(
-            `SELECT note_id as id, title, content, 
-            to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at, 
-            to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at 
-            FROM note`);
-        
-        if(allNotes.rowCount === 0) {
-            res.json({message: "Database not have some data!"});
-        }
-
-        res.json(allNotes.rows);
-    } catch(err) {
-        console.log(err.message);
-    }
-});
+router.get("/api/v1/notes", getAllNotes);
 
 // get specific note
 router.get("/api/v1/notes/:id", async(req, res) => {
