@@ -17,4 +17,15 @@ router.post("/api/v1/notes", async (req, res) => {
     }
 });
 
+// get all notes
+router.get("/api/v1/notes", async (req, res) => {
+    try {
+        const allNotes = await pool.query(
+            "SELECT note_id as id, title, content, to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at, to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at FROM note");
+        res.json(allNotes.rows);
+    } catch(err) {
+        console.log(err.message);
+    }
+});
+
 module.exports = router;
