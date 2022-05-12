@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db.js');
-const { createNote, getAllNotes, getNote } = require('../controllers/notes.controller.js');
+const { createNote, getAllNotes, getNote, updateNote } = require('../controllers/notes.controller.js');
 
 
 // create note
@@ -14,23 +14,7 @@ router.get("/api/v1/notes", getAllNotes);
 router.get("/api/v1/notes/:id", getNote);
 
 // update a note
-router.put("/api/v1/notes/:id", async(req, res) => {
-    try {
-        const { id } = req.params;
-        const { title, content } = req.body;
-
-        const updateNote = await pool.query(
-            `UPDATE note SET title = $1, content = $2, 
-            updated_at = current_timestamp 
-            WHERE note_id = $3`,
-            [title, content, id]
-        );
-
-        res.json({message: "Todo was successfully updated!"});
-    } catch(err) {
-        console.log(err.message);
-    }
-});
+router.put("/api/v1/notes/:id", updateNote);
 
 // delete a todo
 router.delete("/api/v1/notes/:id", async(req, res) => {

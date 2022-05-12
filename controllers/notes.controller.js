@@ -50,8 +50,27 @@ const getNote = async(req, res) => {
     }
 }
 
+const updateNote = async(req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, content } = req.body;
+
+        const updateNote = await pool.query(
+            `UPDATE note SET title = $1, content = $2, 
+            updated_at = current_timestamp 
+            WHERE note_id = $3`,
+            [title, content, id]
+        );
+
+        res.json({message: "Todo was successfully updated!"});
+    } catch(err) {
+        console.log(err.message);
+    }
+}
+
 module.exports = {
     createNote,
     getAllNotes,
-    getNote
+    getNote,
+    updateNote
 };
