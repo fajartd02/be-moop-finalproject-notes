@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db.js');
-const { createNote, getAllNotes } = require('../controllers/notes.controller.js');
+const { createNote, getAllNotes, getNote } = require('../controllers/notes.controller.js');
 
 
 // create note
@@ -11,22 +11,7 @@ router.post("/api/v1/notes", createNote);
 router.get("/api/v1/notes", getAllNotes);
 
 // get specific note
-router.get("/api/v1/notes/:id", async(req, res) => {
-    try {
-        const { id } = req.params;
-        const note = await pool.query(`SELECT note_id as id, title, content, 
-        to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at, 
-        to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at 
-        FROM note WHERE note_id = $1`, [id]);
-
-        if(note.rowCount == 0) {
-            res.json({message: "Data with this id doesn't exists!"});
-        }
-        res.json(note.rows[0]);
-    } catch(err) {
-        console.log(err.message);
-    }
-})
+router.get("/api/v1/notes/:id", getNote);
 
 // update a note
 router.put("/api/v1/notes/:id", async(req, res) => {

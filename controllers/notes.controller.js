@@ -33,7 +33,25 @@ const getAllNotes = async (req, res) => {
     }
 }
 
+const getNote = async(req, res) => {
+    try {
+        const { id } = req.params;
+        const note = await pool.query(`SELECT note_id as id, title, content, 
+        to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at, 
+        to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at 
+        FROM note WHERE note_id = $1`, [id]);
+
+        if(note.rowCount == 0) {
+            res.json({message: "Data with this id doesn't exists!"});
+        }
+        res.json(note.rows[0]);
+    } catch(err) {
+        console.log(err.message);
+    }
+}
+
 module.exports = {
     createNote,
-    getAllNotes
+    getAllNotes,
+    getNote
 };
