@@ -68,9 +68,22 @@ const updateNote = async(req, res) => {
     }
 }
 
+const deleteNote = async(req, res) => {
+    try {
+        const { id } = req.params;
+        const deleteNote = await pool.query(
+            `DELETE FROM note WHERE note_id = $1`, [id]);
+        
+        res.json({message: "Todo was successfully deleted!"})
+    } catch(err) {
+        console.log(err.message);
+    }
+}
+
 module.exports = {
     createNote,
     getAllNotes,
     getNote,
-    updateNote
+    updateNote,
+    deleteNote
 };
