@@ -30,6 +30,6 @@ router.get("/api/v1/notes/:id", authenticate, getNote);
 router.put("/api/v1/notes/:id", authenticate, updateNote);
 
 // delete a note
-router.delete("/api/v1/notes/:id", deleteNote);
+router.delete("/api/v1/notes/:id", authenticate, deleteNote);
 
 module.exports = router;
