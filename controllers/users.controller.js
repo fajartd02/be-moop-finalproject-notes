@@ -15,7 +15,7 @@ const addNewUser = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             status: 'fail',
-            message: 'Internal server error'
+            message: 'Unexpected server error'
         });
     }
 
@@ -35,10 +35,45 @@ const addNewUser = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             status: 'fail',
-            message: 'Internal server error'
+            message: 'Unexpected server error'
         });
     }
 };
+
+const loginUser = async (req, res) => {
+    const { username, pasword } = req.body;
+    let user;
+
+    try {
+        user = await pool.query('SELECT * FROM users WHERE username=$1;', [username]);
+        if (!user.rows.length) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Account doesn\'t exist'
+            });
+        }
+
+        if (!bcrypt.compareSync(password, user.rows[0].password)) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Object or value is invalid'
+            });
+        }
+
+        const payload = {
+            userId: user.rows[0].id,
+            username: user.rows[0].username
+        };
+
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+
+
+}
 
 module.exports = {
     addNewUser
