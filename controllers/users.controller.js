@@ -41,7 +41,7 @@ const addNewUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-    const { username, pasword } = req.body;
+    const { username, password } = req.body;
     let user;
 
     try {
@@ -65,14 +65,34 @@ const loginUser = async (req, res) => {
             username: user.rows[0].username
         };
 
+        const accessToken = jwt.sign(
+            payload,
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '5m' }
+        );
+
+        const refreshToken = jwt.sign(
+            payload,
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        await pool.query('UPDATE users SET refresh_token=$1 WHERE user_id=$2;',
+            [refreshToken, payload.userId]);
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully login',
+            data: {
+                accessToken
+            }
+        });
     } catch (error) {
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
         });
     }
-
-
 }
 
 module.exports = {
