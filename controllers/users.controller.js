@@ -126,14 +126,15 @@ const logoutUser = async (req, res) => {
         });
     }
 
-    const userId = user.rows[0].id;
+    const userId = user.rows[0].user_id;
     try {
-        await pool.query('UPDATE users SET refresh_token=$1 WHERE user_id=$2;'[null, userId]);
+        await pool.query('UPDATE users SET refresh_token=NULL WHERE user_id=$1;', [userId]);
         return res.status(200).json({
             status: 'success',
             message: 'Successfully logout'
         });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'

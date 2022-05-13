@@ -2,6 +2,7 @@ const express = require('express');
 const router = require ('./routes/index.js');
 const dotenv = require('dotenv');
 const pool = require("./config/db.js");
+const cookieParser = require('cookie-parser');
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json()); // => req.body();
+app.use(cookieParser());
 
 app.use(router);
 
