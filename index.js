@@ -31,6 +31,8 @@ app.listen(PORT, async () => {
                 title VARCHAR(255) NOT NULL,
                 content VARCHAR(255) NOT NULL,
                 VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP NOT NULL,
+                updated_at TIMESTAMP NOT NULL,
                 FOREIGN KEY (note_id) REFERENCES users(user_id)
             );`
         );
