@@ -4,8 +4,8 @@ const createNote = async (req, res) => {
     try {
         const { title, content } = req.body;
         const newContent = await pool.query(
-            `INSERT INTO note(title, content, created_at, updated_at) 
-             VALUES ($1, $2, current_timestamp, current_timestamp) 
+            `INSERT INTO note(title, content, created_at, updated_at)
+             VALUES ($1, $2, current_timestamp, current_timestamp)
              RETURNING *`,
             [title, content]);
 
@@ -18,11 +18,11 @@ const createNote = async (req, res) => {
 const getAllNotes = async (req, res) => {
     try {
         const allNotes = await pool.query(
-            `SELECT note_id as id, title, content, 
-            to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at, 
-            to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at 
+            `SELECT note_id as id, title, content,
+            to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at,
+            to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at
             FROM note`);
-        
+
         if(allNotes.rowCount === 0) {
             res.json({message: "Database not have some data!"});
         }
@@ -36,9 +36,9 @@ const getAllNotes = async (req, res) => {
 const getNote = async(req, res) => {
     try {
         const { id } = req.params;
-        const note = await pool.query(`SELECT note_id as id, title, content, 
-        to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at, 
-        to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at 
+        const note = await pool.query(`SELECT note_id as id, title, content,
+        to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at,
+        to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at
         FROM note WHERE note_id = $1`, [id]);
 
         if(note.rowCount == 0) {
@@ -56,8 +56,8 @@ const updateNote = async(req, res) => {
         const { title, content } = req.body;
 
         const updateNote = await pool.query(
-            `UPDATE note SET title = $1, content = $2, 
-            updated_at = current_timestamp 
+            `UPDATE note SET title = $1, content = $2,
+            updated_at = current_timestamp
             WHERE note_id = $3`,
             [title, content, id]
         );
@@ -73,7 +73,7 @@ const deleteNote = async(req, res) => {
         const { id } = req.params;
         const deleteNote = await pool.query(
             `DELETE FROM note WHERE note_id = $1`, [id]);
-        
+
         res.json({message: "Todo was successfully deleted!"})
     } catch(err) {
         console.log(err.message);

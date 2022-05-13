@@ -1,6 +1,6 @@
 CREATE DATABASE note_database;
 
---\c into note_database
+-- \c into note_database
 
 CREATE TABLE note(
     note_id SERIAL PRIMARY KEY,
