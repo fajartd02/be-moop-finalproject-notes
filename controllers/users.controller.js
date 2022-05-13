@@ -101,7 +101,48 @@ const loginUser = async (req, res) => {
     }
 }
 
+const logoutUser = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    let user;
+    if(!refreshToken) {
+        return res.status(401).json({
+            status: 'fail',
+            message: 'Unauthorized error'
+        });
+    }
+
+    try {
+        user = await pool.query('SELECT * FROM users WHERE refresh_token=$1;', [refreshToken]);
+        if (user.rowCount === 0) {
+            return res.status(204).json({
+                status: 'success',
+                message: 'Successfully logout'
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+
+    const userId = user.rows[0].id;
+    try {
+        await pool.query('UPDATE users SET refresh_token=$1 WHERE user_id=$2;'[null, userId]);
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully logout'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
+    }
+}
+
 module.exports = {
     addNewUser,
-    loginUser
+    loginUser,
+    logoutUser
 };
