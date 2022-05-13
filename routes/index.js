@@ -29,7 +29,7 @@ router.get("/api/v1/notes/:id", authenticate, getNote);
 // update a note
 router.put("/api/v1/notes/:id", authenticate, updateNote);
 
-// delete a todo
+// delete a note
 router.delete("/api/v1/notes/:id", deleteNote);
 
 module.exports = router;

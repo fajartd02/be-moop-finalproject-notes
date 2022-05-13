@@ -121,14 +121,30 @@ const updateNote = async (req, res) => {
 }
 
 const deleteNote = async(req, res) => {
-    try {
-        const { id } = req.params;
-        const deleteNote = await pool.query(
-            `DELETE FROM note WHERE note_id = $1`, [id]);
+    const { id } = req.params;
+    const token = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(token).userId;
 
-        res.json({message: "Todo was successfully deleted!"})
+    try {
+        const deletedNote = await pool.query(
+            `DELETE FROM notes WHERE user_id = $1 AND note_id = $2;`, [userId, id]);
+
+        if (deletedNote.rowCount === 0) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Note not found'
+            });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully delete note'
+        });
     } catch(err) {
-        console.log(err.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
     }
 }
 
