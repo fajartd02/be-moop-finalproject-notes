@@ -21,10 +21,10 @@ router.post('/api/v1/users/login', loginUser);
 router.post("/api/v1/notes/add", authenticate, createNote);
 
 // get all notes
-router.get("/api/v1/notes", getAllNotes);
+router.get("/api/v1/notes", authenticate, getAllNotes);
 
 // get specific note
-router.get("/api/v1/notes/:id", getNote);
+router.get("/api/v1/notes/:id", authenticate, getNote);
 
 // update a note
 router.put("/api/v1/notes/:id", updateNote);

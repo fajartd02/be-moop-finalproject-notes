@@ -7,7 +7,7 @@ const addNewUser = async (req, res) => {
 
     try {
         const userExist = await pool.query('SELECT * FROM users WHERE username=$1;', [username]);
-        if (userExist.rows.length) {
+        if (userExist.rowCount) {
             return res.status(400).json({
                 status: 'fail',
                 message: 'This account is already exist'
@@ -34,7 +34,6 @@ const addNewUser = async (req, res) => {
             message: 'Successfully registered a new account'
         });
     } catch (error) {
-        console.log("error");
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
@@ -92,7 +91,6 @@ const loginUser = async (req, res) => {
             }
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
