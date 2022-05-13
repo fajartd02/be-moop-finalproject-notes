@@ -28,11 +28,12 @@ app.listen(PORT, async () => {
         await pool.query(
             `CREATE TABLE IF NOT EXISTS notes (
                 note_id SERIAL NOT NULL PRIMARY KEY,
+                user_id INT NOT NULL,
                 title VARCHAR(255) NOT NULL,
                 content VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP NOT NULL,
                 updated_at TIMESTAMP NOT NULL,
-                FOREIGN KEY (note_id) REFERENCES users(user_id)
+                FOREIGN KEY (user_id) REFERENCES users(user_id)
             );`
         );
     } catch (error) {

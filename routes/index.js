@@ -9,6 +9,7 @@ const {
     deleteNote
 } = require('../controllers/notes.controller.js');
 const { addNewUser, loginUser } = require('../controllers/users.controller.js');
+const { authenticate } = require('../middleware/authenticate.middleware.js');
 
 // create new user
 router.post('/api/v1/users/add', addNewUser);
@@ -17,7 +18,7 @@ router.post('/api/v1/users/add', addNewUser);
 router.post('/api/v1/users/login', loginUser);
 
 // create note
-router.post("/api/v1/notes/add", createNote);
+router.post("/api/v1/notes/add", authenticate, createNote);
 
 // get all notes
 router.get("/api/v1/notes", getAllNotes);

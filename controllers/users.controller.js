@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const pool = require('../config/db');
+const jwt = require('jsonwebtoken');
 
 const addNewUser = async (req, res) => {
     const { username, password, fullName } = req.body;
@@ -62,9 +63,11 @@ const loginUser = async (req, res) => {
         }
 
         const payload = {
-            userId: user.rows[0].id,
+            userId: user.rows[0].user_id,
             username: user.rows[0].username
         };
+
+        console.log(payload);
 
         const accessToken = jwt.sign(
             payload,
@@ -89,6 +92,7 @@ const loginUser = async (req, res) => {
             }
         });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
