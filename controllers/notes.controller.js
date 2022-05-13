@@ -5,7 +5,6 @@ const createNote = async (req, res) => {
     const { title, content } = req.body;
     const token = req.headers['authorization'].split(' ')[1];
     const userId = jwt.decode(token).userId;
-    console.log(userId);
 
     try {
         const newNote = await pool.query(
@@ -31,20 +30,29 @@ const createNote = async (req, res) => {
 };
 
 const getAllNotes = async (req, res) => {
+    const token = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(token).userId;
+
     try {
-        const allNotes = await pool.query(
+        console.log('bug');
+        const notes = await pool.query(
             `SELECT note_id as id, title, content,
             to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at,
             to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at
-            FROM note`);
+            FROM notes WHERE user_id=$1;`, [userId]);
 
-        if(allNotes.rowCount === 0) {
-            res.json({message: "Database not have some data!"});
-        }
-
-        res.json(allNotes.rows);
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully get all notes',
+            data: {
+                notes: notes.rows
+            }
+        });
     } catch(err) {
-        console.log(err.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
     }
 }
 
