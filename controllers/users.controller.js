@@ -66,8 +66,6 @@ const loginUser = async (req, res) => {
             username: user.rows[0].username
         };
 
-        console.log(payload);
-
         const accessToken = jwt.sign(
             payload,
             process.env.ACCESS_TOKEN_SECRET,
