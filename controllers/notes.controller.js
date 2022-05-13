@@ -63,7 +63,7 @@ const getNote = async(req, res) => {
         const note = await pool.query(`SELECT note_id as id, title, content,
         to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at,
         to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at
-        FROM note WHERE user_id=$1 AND note_id = $2`, [userId, id]);
+        FROM notes WHERE user_id=$1 AND note_id = $2`, [userId, id]);
 
         if(note.rowCount === 0) {
             return res.status(404).json({
@@ -79,6 +79,7 @@ const getNote = async(req, res) => {
             }
         });
     } catch(err) {
+        console.log(err);
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
@@ -86,21 +87,36 @@ const getNote = async(req, res) => {
     }
 }
 
-const updateNote = async(req, res) => {
-    try {
-        const { id } = req.params;
-        const { title, content } = req.body;
+const updateNote = async (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    const token = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(token).userId;
 
-        const updateNote = await pool.query(
-            `UPDATE note SET title = $1, content = $2,
+    try {
+        const updatedNote = await pool.query(
+            `UPDATE notes SET title = $1, content = $2,
             updated_at = current_timestamp
-            WHERE note_id = $3`,
-            [title, content, id]
+            WHERE user_id = $3 AND note_id = $4 RETURNING *;`,
+            [title, content, userId, id]
         );
 
-        res.json({message: "Todo was successfully updated!"});
+        if (updatedNote.rowCount === 0) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Note not found'
+            });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully update note'
+        });
     } catch(err) {
-        console.log(err.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
     }
 }
 
