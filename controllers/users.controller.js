@@ -81,6 +81,11 @@ const loginUser = async (req, res) => {
         await pool.query('UPDATE users SET refresh_token=$1 WHERE user_id=$2;',
             [refreshToken, payload.userId]);
 
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            maxAge: 60 * 60 * 24 * 1000
+        });
+
         return res.status(200).json({
             status: 'success',
             message: 'Successfully login',
