@@ -8,7 +8,10 @@ const {
     updateNote,
     deleteNote
 } = require('../controllers/notes.controller.js');
+const { addNewUser } = require('../controllers/users.controller.js');
 
+// create new user
+router.post('/api/v1/users/add', addNewUser);
 
 // create note
 router.post("/api/v1/notes", createNote);
