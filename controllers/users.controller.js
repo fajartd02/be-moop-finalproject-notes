@@ -129,6 +129,7 @@ const logoutUser = async (req, res) => {
     const userId = user.rows[0].user_id;
     try {
         await pool.query('UPDATE users SET refresh_token=NULL WHERE user_id=$1;', [userId]);
+        res.clearCookie('refreshToken');
         return res.status(200).json({
             status: 'success',
             message: 'Successfully logout'
