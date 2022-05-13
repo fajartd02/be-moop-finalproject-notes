@@ -1,17 +1,30 @@
 const pool = require('../config/db.js');
+const jwt = require('jsonwebtoken');
 
 const createNote = async (req, res) => {
+    const { title, content } = req.body;
+    const token = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(token).userId;
+
     try {
-        const { title, content } = req.body;
-        const newContent = await pool.query(
-            `INSERT INTO note(title, content, created_at, updated_at)
+        const newNote = await pool.query(
+            `INSERT INTO note(user_id, title, content, created_at, updated_at)
              VALUES ($1, $2, current_timestamp, current_timestamp)
              RETURNING *`,
-            [title, content]);
+            [userId, title, content]);
 
-        res.json(newContent.rows[0]);
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully registered a new account',
+            data: {
+                note: newContent.rows[0]
+            }
+        });
     } catch(err) {
-        console.log(err.message);
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Unexpected server error'
+        });
     }
 };
 

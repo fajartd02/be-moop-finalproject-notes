@@ -23,9 +23,9 @@ const addNewUser = async (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
     try {
-        await pool.query(`INSERT INTO users (username, password, fullName)
-            VALUES ($1, $2, $3);`,
-            [username, hashedPassword, fullName]
+        await pool.query(`INSERT INTO users (username, password, full_name)
+        VALUES ($1, $2, $3);`,
+        [username, hashedPassword, fullName]
         );
 
         return res.status(200).json({
@@ -33,6 +33,7 @@ const addNewUser = async (req, res) => {
             message: 'Successfully registered a new account'
         });
     } catch (error) {
+        console.log("error");
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
@@ -96,5 +97,6 @@ const loginUser = async (req, res) => {
 }
 
 module.exports = {
-    addNewUser
+    addNewUser,
+    loginUser
 };
