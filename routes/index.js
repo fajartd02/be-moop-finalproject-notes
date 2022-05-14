@@ -8,6 +8,7 @@ const {
     updateNote,
     deleteNote
 } = require('../controllers/notes.controller.js');
+const { refreshAcessToken } = require('../controllers/tokens.controller.js');
 const { addNewUser, loginUser, logoutUser } = require('../controllers/users.controller.js');
 const { authenticate } = require('../middleware/authenticate.middleware.js');
 
@@ -34,5 +35,8 @@ router.put("/api/v1/notes/:id", authenticate, updateNote);
 
 // delete a note
 router.delete("/api/v1/notes/:id", authenticate, deleteNote);
+
+// refresh access token
+router.post('/api/v1/refresh', refreshAcessToken);
 
 module.exports = router;
