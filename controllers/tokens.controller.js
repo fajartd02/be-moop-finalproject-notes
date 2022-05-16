@@ -46,7 +46,7 @@ const refreshAcessToken = async (req, res) => {
                     accessToken
                 }
             });
-        })
+        });
     } catch (error) {
         return res.status(500).json({
             status: 'fail',

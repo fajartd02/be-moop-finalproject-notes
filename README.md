@@ -59,3 +59,4 @@ npm run dev
 - PostgreSQL
 - pg
 - dotenv
+- JWT
