@@ -11,4 +11,6 @@ const pool = new Pool({
     port: 5432
 });
 
+console.log(process.env.DB_USER);
+
 module.exports = pool;
