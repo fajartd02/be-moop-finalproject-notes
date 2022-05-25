@@ -5,9 +5,9 @@
 - Andros C.C
 - Leonardo
 
-# MOOP - BACKEND ONLY
-For frontend, you can see in here:
-[Frontend](https://github.com/fajartd02/fe-moop-finalproject-notes)
+# MOOP Notes - Backend Version
+ For frontend, you can see in here:
+ [Frontend](https://github.com/fajartd02/fe-moop-finalproject-notes)
 
 # How to run Backend
 - Make sure you have install the postgreSQL and put in your environment PATH
