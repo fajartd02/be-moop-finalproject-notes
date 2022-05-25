@@ -63,4 +63,8 @@ npm run dev
 - PostgreSQL
 - pg
 - dotenv
-- JWT
+- jsonwebtoken (JWT)
+- bcrypt
+- cookie-parser
+- dotenv
+- fs
