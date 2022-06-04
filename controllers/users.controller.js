@@ -88,40 +88,20 @@ const loginUser = async (req, res) => {
 }
 
 const logoutUser = async (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
-    let user;
-    if(!refreshToken) {
-        return res.status(401).json({
-            status: 'fail',
-            message: 'Unauthorized error'
-        });
-    }
+    const accessToken = req.headers['authorization'].split(' ')[1];
+    const userId = jwt.decode(accessToken).userId;
 
     try {
-        user = await pool.query('SELECT * FROM users WHERE refresh_token=$1;', [refreshToken]);
-        if (user.rowCount === 0) {
-            return res.status(204).json({
-                status: 'success',
-                message: 'Successfully logout'
-            });
-        }
-    } catch (error) {
-        return res.status(500).json({
-            status: 'fail',
-            message: 'Unexpected server error'
-        });
-    }
+        await pool.query(
+            'UPDATE users SET access_token=NULL WHERE id=$1;',
+            [userId]
+        );
 
-    const userId = user.rows[0].user_id;
-    try {
-        await pool.query('UPDATE users SET refresh_token=NULL WHERE user_id=$1;', [userId]);
-        res.clearCookie('refreshToken');
         return res.status(200).json({
             status: 'success',
             message: 'Successfully logout'
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             status: 'fail',
             message: 'Unexpected server error'
