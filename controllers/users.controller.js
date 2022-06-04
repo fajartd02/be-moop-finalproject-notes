@@ -62,7 +62,7 @@ const loginUser = async (req, res) => {
         }
 
         const payload = {
-            userId: user.rows[0].user_id,
+            userId: user.rows[0].id,
             username: user.rows[0].username
         };
 
