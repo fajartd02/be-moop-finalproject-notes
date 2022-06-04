@@ -13,10 +13,10 @@ const { addNewUser, loginUser, logoutUser } = require('../controllers/users.cont
 const { authenticate } = require('../middleware/authenticate.middleware.js');
 
 // create new user
-router.post('/api/v1/users/add', addNewUser);
+router.post('/api/v1/register', addNewUser);
 
 // login user
-router.post('/api/v1/users/login', loginUser);
+router.post('/api/v1/login', loginUser);
 
 // logout user
 router.delete('/api/v1/users/logout', logoutUser);

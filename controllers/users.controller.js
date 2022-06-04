@@ -72,6 +72,11 @@ const loginUser = async (req, res) => {
             { expiresIn: '1d' }
         );
 
+        await pool.query(
+            'UPDATE users SET access_token =$1 WHERE username=$2;',
+            [accessToken, username]
+        );
+
         return res.status(200).json({
             status: 'success',
             message: 'Successfully login',
