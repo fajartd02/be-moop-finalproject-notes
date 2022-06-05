@@ -34,7 +34,7 @@ const getAllNotes = async (req, res) => {
 
     try {
         const notes = await pool.query(
-            `SELECT note_id as id, title, content,
+            `SELECT id, title, content,
             to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at,
             to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at
             FROM notes WHERE user_id=$1;`, [userId]);
@@ -60,10 +60,10 @@ const getNote = async(req, res) => {
     const userId = jwt.decode(token).userId;
 
     try {
-        const note = await pool.query(`SELECT note_id as id, title, content,
+        const note = await pool.query(`SELECT id, title, content,
         to_char(created_at, 'yyyymmdd hh:mi:ss') as created_at,
         to_char(updated_at, 'yyyymmdd hh:mi:ss') as updated_at
-        FROM notes WHERE user_id=$1 AND note_id = $2`, [userId, id]);
+        FROM notes WHERE user_id=$1 AND id = $2`, [userId, id]);
 
         if(note.rowCount === 0) {
             return res.status(404).json({
@@ -97,7 +97,7 @@ const updateNote = async (req, res) => {
         const updatedNote = await pool.query(
             `UPDATE notes SET title = $1, content = $2,
             updated_at = current_timestamp
-            WHERE user_id = $3 AND note_id = $4 RETURNING *;`,
+            WHERE user_id = $3 AND id = $4 RETURNING *;`,
             [title, content, userId, id]
         );
 
@@ -127,7 +127,7 @@ const deleteNote = async(req, res) => {
 
     try {
         const deletedNote = await pool.query(
-            `DELETE FROM notes WHERE user_id = $1 AND note_id = $2;`, [userId, id]);
+            `DELETE FROM notes WHERE user_id = $1 AND id = $2;`, [userId, id]);
 
         if (deletedNote.rowCount === 0) {
             return res.status(404).json({

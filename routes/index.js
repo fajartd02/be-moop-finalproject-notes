@@ -20,7 +20,7 @@ router.post("/api/v1/notes", authenticate, createNote);
 
 router.put("/api/v1/notes/:id", authenticate, updateNote);
 
-router.delete('/api/v1/users/logout', logoutUser);
+router.delete('/api/v1/users/logout', authenticate, logoutUser);
 router.delete("/api/v1/notes/:id", authenticate, deleteNote);
 
 module.exports = router;
