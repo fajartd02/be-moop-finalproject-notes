@@ -8,7 +8,6 @@ const {
     updateNote,
     deleteNote
 } = require('../controllers/notes.controller.js');
-const { refreshAcessToken } = require('../controllers/tokens.controller.js');
 const { addNewUser, loginUser, logoutUser } = require('../controllers/users.controller.js');
 const { authenticate } = require('../middleware/authenticate.middleware.js');
 
