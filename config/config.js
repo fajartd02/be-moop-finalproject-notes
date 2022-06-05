@@ -15,7 +15,8 @@ const config = {
         username: env.DB_USERNAME,
         password: env.DB_PASSWORD,
         port: parseInt(env.DB_PORT)
-    }
+    },
+    port: 3000
 };
 
 module.exports = config;
